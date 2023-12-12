@@ -25,14 +25,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req,res,next)=>{
-    User.findByPk("6576fa7f77d4eb3b9a62b48b").
+    User.findById('6576fa7f77d4eb3b9a62b48b').
     then(user=>{
-        req.user=user;
+        req.user=new User(user.name,user.email,user.cart,user._id);
         next();
     }).
     catch(err=>{
     console.log(err)})
-    next();
+    
 
 });
 
