@@ -29,13 +29,24 @@
                                </form>
                                 
                             </div>
+                            
+                          
                         </article>
                         <% } %>
                 </div>
                 </li>
                 </ul>
+                <hr>
+               
                 <% } else { %>
                     <h1>No Products Found!</h1>
                     <% } %>
+
+                    <div class="card__actions" >
+                        <form  action="/create-orders" method="POST">
+                             <button class="btn success" type="submit">Orders</button>
+                        </form>
+                         
+                     </div>
         </main>
         <%- include('../includes/end.ejs') %>

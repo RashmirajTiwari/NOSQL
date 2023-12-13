@@ -88,6 +88,16 @@ exports.postDeleteCart = (req, res, next) => {
  
 };
 
+exports.postOrder = (req, res, next) => {
+  req.user.addOrders().
+    then(result=>{
+      console.log(result)
+      res.redirect('/orders');
+    }).catch(err=>{console.log(err)})
+ 
+};
+
+
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {
     path: '/orders',
