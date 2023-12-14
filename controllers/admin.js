@@ -45,8 +45,8 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  //crateProduct is a inbuit method.
-  const product=new Product(title,price,description,imageUrl,null,req.user._id);
+  
+  const product=new Product({title:title,price:price,description:description,imageUrl:imageUrl});
   product.save().then(result=>{
     console.log('Product Created');
     res.redirect('/');
@@ -57,7 +57,7 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  const proId=req.body.productId;
+  const prodId=req.body.productId;
   const upatedTitle = req.body.title;
   const upatedtImageUrl = req.body.imageUrl;
   const upatedtPrice = req.body.price;
@@ -65,15 +65,16 @@ exports.postEditProduct = (req, res, next) => {
   // const updateProduct = new Product(proId,upatedTitle, upatedtImageUrl, upatedtDescription, upatedtPrice);
   // updateProduct.save();
 
-    const product=new Product(
-      upatedTitle,
-      upatedtPrice,
-      upatedtDescription,
-      upatedtImageUrl,
-      new ObjectId(proId)
-      );
-    
-    product.save() .then(()=>{
+   
+    Product.findById(prodId).then(product=>{
+
+      product.title=upatedTitle;
+      product.price=upatedtPrice;
+      product.description=upatedtDescription;
+      product.imageUrl=upatedtImageUrl;
+      return product.save();
+   
+    }).then(()=>{
     console.log("Updated Product...!")
     res.redirect('/');
   })
@@ -84,8 +85,8 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-  const proId=req.params.productId;
-  Product.deleteById(proId).then(()=>{
+  const prodId=req.params.productId;
+  Product.findByIdAndDelete(prodId).then(()=>{
     console.log("Deleted Product...!")
     res.redirect('/admin/products');
   })
@@ -97,7 +98,7 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
 
-  Product.fetchAll().then(products=>{
+  Product.find().then(products=>{
     res.render("admin/products", {
       prods:products,
       pageTitle: 'Products',
