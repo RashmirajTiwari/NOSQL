@@ -43,7 +43,13 @@ userSchema.methods.addToCart=function(product){
         
             }
         
-           
+     userSchema.methods.removeFromCart=function(prodId)  {
+        const updatedCartItems=this.cart.items.filter(item=>{
+         return item.productId.toString()!=prodId.toString();
+        });
+        this.cart=updatedCartItems;
+        return this.save();
+     }    
     
 
 module.exports=mongoose.model('User',userSchema);
